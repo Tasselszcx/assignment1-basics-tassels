@@ -53,7 +53,7 @@ def find_chunk_boundaries(
             if found_at != -1:
                 chunk_boundaries[bi] = pos + found_at
                 break
-        pos += mini_chunk_size
+            pos += mini_chunk_size
     
     return sorted(set(chunk_boundaries))
 
@@ -354,4 +354,20 @@ def write_vocab(vocab, outpath):
     """将vocab保存为pickle文件"""
     os.makedirs(os.path.dirname(outpath), exist_ok=True)
     with open(outpath, "wb") as f:
-        pickle
+        pickle.dump(vocab, f)  # ✅ 添加 .dump(vocab, f)
+    print(f"💾 Saved vocabulary with {len(vocab)} tokens to {outpath}")
+
+# ============================================================================
+# 主程序入口（用于测试）
+# ============================================================================
+
+if __name__ == "__main__":
+    # 示例：训练一个小的tokenizer
+    vocab, merges = train_bpe(
+        input_path="./data/TinyStoriesV2-GPT4-train.txt",
+        vocab_size=10000,
+        special_tokens=["<|endoftext|>"],
+        merges_outpath="./out/ts-valid-merges.pkl",
+        vocab_outpath="./out/ts-valid-vocab.pkl",
+    )
+    print(f"\n✅ 训练完成！vocab size = {len(vocab)}, merges = {len(merges)}")
