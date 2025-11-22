@@ -29,7 +29,11 @@ def run_linear(
         Float[Tensor, "... d_out"]: The transformed output of your linear module.
     """
 
-    raise NotImplementedError
+    from cs336_basics.transformer import Linear
+    
+    linear = Linear(d_in, d_out, device=weights.device, dtype=weights.dtype)
+    linear.weight.data = weights
+    return linear(in_features)
 
 
 def run_embedding(
@@ -51,7 +55,11 @@ def run_embedding(
         Float[Tensor, "... d_model"]: Batch of embeddings returned by your Embedding layer.
     """
 
-    raise NotImplementedError
+    from cs336_basics.transformer import Embedding
+    
+    embedding = Embedding(vocab_size, d_model, device=weights.device, dtype=weights.dtype)
+    embedding.weight.data = weights
+    return embedding(token_ids)
 
 
 def run_swiglu(
@@ -83,7 +91,13 @@ def run_swiglu(
     # swiglu.w1.weight.data = w1_weight
     # swiglu.w2.weight.data = w2_weight
     # swiglu.w3.weight.data = w3_weight
-    raise NotImplementedError
+    from cs336_basics.transformer import SwiGLU
+    
+    swiglu = SwiGLU(d_model, d_ff, device=in_features.device, dtype=in_features.dtype)
+    swiglu.w1.weight.data = w1_weight
+    swiglu.w2.weight.data = w2_weight
+    swiglu.w3.weight.data = w3_weight
+    return swiglu(in_features)
 
 
 def run_scaled_dot_product_attention(
@@ -559,7 +573,8 @@ def get_tokenizer(
     Returns:
         A BPE tokenizer that uses the provided vocab, merges, and special tokens.
     """
-    raise NotImplementedError
+    from cs336_basics.tokenizer import Tokenizer
+    return Tokenizer(vocab, merges, special_tokens)
 
 
 def run_train_bpe(
@@ -589,4 +604,5 @@ def run_train_bpe(
                 representing that <token1> was merged with <token2>.
                 Merges are ordered by order of creation.
     """
-    raise NotImplementedError
+    from cs336_basics.train_bpe import train_bpe
+    return train_bpe(input_path, vocab_size, special_tokens, **kwargs)
