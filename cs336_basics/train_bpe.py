@@ -172,11 +172,8 @@ def merge(
         for i in range(len(new_key) - 1):
             left, right = new_key[i], new_key[i + 1]
             
-            # 增加频率
             pair_freqs[left, right] += old_freq
-            changed_pairs.add((left, right))  # 标记为已改变
-            
-            # 更新反向索引
+            changed_pairs.add((left, right)) 
             pairs_to_keys[left, right].add(new_key)
 
         freqs[new_key] = freqs.get(new_key, 0) + old_freq
