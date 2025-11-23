@@ -88,7 +88,8 @@ def pre_tokenize(
     special_tokens: list[str]
 ) -> dict[tuple[bytes], int]:
     num_processes = mp.cpu_count()
-    pool = mp.Pool(processes=num_processes)
+    ctx = mp.get_context('spawn')
+    pool = ctx.Pool(processes=num_processes)
 
     chunk_freqs = []
     special_pattern = None
